@@ -249,7 +249,7 @@ version = "1.12.1"
 
 [metadata]
 content-hash = "07237356f4d20f230be0755068018051bfa81281f2596c63270ee969842c7b58"
-python-versions = "^3.7"
+python-versions = "3.8.1"
 
 [metadata.files]
 asgiref = [
