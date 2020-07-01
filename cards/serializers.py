@@ -11,14 +11,16 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 class CardSerializer(serializers.HyperlinkedModelSerializer):
-
+    user = serializers.StringRelatedField()
     class Meta:
         model = Card
         fields = [
+            'user',
             'url',
             'color',
             'font',
             'border',
-            'message',
+            'outer_message',
+            'inner_message',
             'posted_at'
         ]

@@ -12,4 +12,6 @@ class UserViewSet(viewsets.ModelViewSet):
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
