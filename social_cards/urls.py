@@ -18,9 +18,11 @@ from django.conf import settings
 from django.urls import include, path
 from rest_framework import routers
 from rest_framework.authtoken import views as authtoken_views
+from cards import views as cards_views
 
 router = routers.DefaultRouter()
-
+router.register('users', cards_views.UserViewSet)
+router.register('cards', cards_views.CardViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
