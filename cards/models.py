@@ -16,6 +16,7 @@ class Card(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='cards')
     outer_message = models.CharField(max_length=500, null=True, blank=True)
     inner_message = models.CharField(max_length=500, null=True, blank=True)
+    NO = 'None'
     LC = 'Living Coral'
     UV = 'Ultra Violet'
     GR = 'Greenery'
@@ -38,6 +39,7 @@ class Card(models.Model):
     FR = 'Fuchsia Rose'
     CB = 'Cerulean Blue'
     COLOR_CHOICES = [
+        (NO, 'None'),
         (LC, 'Living Coral'),
         (UV, 'Ultra Violet'),
         (GR, 'Greenery'),
@@ -60,7 +62,7 @@ class Card(models.Model):
         (FR, 'Fuchsia Rose'),
         (CB, 'Cerulean Blue'),
     ]
-    color = models.CharField(max_length=15, choices=COLOR_CHOICES, default=CB)
+    color = models.CharField(max_length=15, choices=COLOR_CHOICES, default=NO)
     ML = 'Montserrat + Lora (Modern)'
     PL = 'Prata + Lato (Elegant)'
     AJ = 'Archivo Black + Judson (Emphasis)'
