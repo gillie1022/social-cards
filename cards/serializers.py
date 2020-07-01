@@ -1,5 +1,5 @@
 from users.models import User
-from cards.models import Card, Friend
+from cards.models import Card, Follower
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
