@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets, permissions, views
 from users.models import User 
 from cards.models import Card
-from cards.serializers import UserSerializer, CardSerializer
+from cards.serializers import UserSerializer, CardSerializer, UserFollowsSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -18,7 +18,7 @@ class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -38,6 +38,6 @@ class UserFollowsView(views.APIView):
         
     def post(self, request, username, format=None):
         user = get_object_or_404(User, username=username)
-        serializer = UserSerializer(user in user.follows.all(), many=True, context={'request':request})
+        serializer = UserFollowsSerializer(user.follows.all(), many=True, context={'request':request})
         return Response(serializer.data)
         

@@ -83,6 +83,9 @@ class Card(models.Model):
     border = models.CharField(max_length=500, choices=BORDER_CHOICES, default=NONE)
     posted_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-posted_at']
+
 def get_cards_from_those_user_follows(queryset, user):
     if user.is_authenticated:
         cards = queryset.filter(Q(author in user.follows.all()))

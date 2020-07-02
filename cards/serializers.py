@@ -13,6 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
             'follows'
         ]
 
+class UserFollowsSerializer(serializers.ModelSerializer):
+    follows = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = User
+        fields =['follows']
+
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
