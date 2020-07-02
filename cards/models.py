@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from users.models import User
 
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
@@ -76,13 +75,9 @@ class Card(models.Model):
     SOLID = 'Solid'
     INSET = 'Inset'
     BORDER_CHOICES = [
-            (NONE, 'None'),
+        (NONE, 'None'),
         (SOLID, 'Solid'),
-        (INSET, 'Inset')
+        (INSET, 'Inset'),
     ]
     border = models.CharField(max_length=500, choices=BORDER_CHOICES, default=NONE)
     posted_at = models.DateTimeField(auto_now_add=True)
-
-class Follower(models.Model):
-    pass
-

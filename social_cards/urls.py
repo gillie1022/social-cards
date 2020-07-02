@@ -24,13 +24,13 @@ router = routers.DefaultRouter()
 router.register('users', cards_views.UserViewSet)
 router.register('cards', cards_views.CardViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
-    path('api/', include(router.urls))
-    
+    path('api/', include(router.urls)),
 ]
 
 if settings.DEBUG:
