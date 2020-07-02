@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/', include(router.urls)),
+    path('api/<str:username>/follows/', cards_views.UserFollowsView.as_view(), name='follows')
 ]
 
 if settings.DEBUG:

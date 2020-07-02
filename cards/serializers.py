@@ -13,13 +13,21 @@ class UserSerializer(serializers.ModelSerializer):
             'follows'
         ]
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username'
+        ]
+
 class CardSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.StringRelatedField()
+    author = AuthorSerializer()
     class Meta:
         model = Card
         fields = [
             'id',
-            'user',
+            'author',
             'url',
             'color',
             'font',

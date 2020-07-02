@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
+from django.db.models import Q
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from users.models import User
@@ -12,7 +13,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 class Card(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='cards')
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='cards')
     outer_message = models.CharField(max_length=500, null=True, blank=True)
     inner_message = models.CharField(max_length=500, null=True, blank=True)
     NO = 'None'
@@ -81,3 +82,8 @@ class Card(models.Model):
     ]
     border = models.CharField(max_length=500, choices=BORDER_CHOICES, default=NONE)
     posted_at = models.DateTimeField(auto_now_add=True)
+
+def get_cards_from_those_user_follows(queryset, user):
+    if user.is_authenticated:
+        cards = queryset.filter(Q(author in user.follows.all()))
+    return cards
