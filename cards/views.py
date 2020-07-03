@@ -20,7 +20,7 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(author=self.request.user)
 
     @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
     def me(self, request):
@@ -38,6 +38,6 @@ class UserFollowsView(views.APIView):
         
     def post(self, request, username, format=None):
         user = get_object_or_404(User, username=username)
-        serializer = UserFollowsSerializer(user.follows.all(), many=True, context={'request':request})
+        serializer = UserFollowsSerializer(self.request.user.follows.all(), many=True, context={'request':request})
         return Response(serializer.data)
         

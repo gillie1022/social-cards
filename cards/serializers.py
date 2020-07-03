@@ -14,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 class UserFollowsSerializer(serializers.ModelSerializer):
-    follows = serializers.StringRelatedField(many=True)
     class Meta:
         model = User
         fields =['follows']
@@ -28,7 +27,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         ]
 
 class CardSerializer(serializers.HyperlinkedModelSerializer):
-    author = AuthorSerializer()
+    author = AuthorSerializer(read_only=True)
     class Meta:
         model = Card
         fields = [
