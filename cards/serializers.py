@@ -3,7 +3,7 @@ from cards.models import Card
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):    
-    follows = serializers.StringRelatedField(many=True)
+    followed_users = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = User
