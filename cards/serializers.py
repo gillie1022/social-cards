@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'username',
-            'follows'
+            'followed_users'
         ]
 
 class UserFollowsSerializer(serializers.ModelSerializer):

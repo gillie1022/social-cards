@@ -16,9 +16,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Card.objects.filter(author__in=self.request.user.followed_users.all())
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -42,22 +44,29 @@ class CardViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = CardSerializer(cards, many=True, context={'request': request})
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['GET', 'POST'], permission_classes=[permissions.IsAuthenticated])
+    def followed(self, request):
+        cards = Card.objects.filter(author__fans=request.user)
+        page = self.paginate_queryset(cards)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = CardSerializer(cards, many=True, context={'request': request})
+        return Response(serializer.data)
 
 
 
 
 class UserFollowsView(views.APIView):
+    permission_classes=[permissions.IsAuthenticated]
+
     def get(self, request, format=None):
-        user = User.objects.all()
-        serializer = UserFollowsSerializer(user, many=True, context={'request':request})
-        return Response(serializer.data)
+        usernames = [user.username for user in request.user.followed_users.all()]
+        return Response(usernames)
         
     def post(self, request, format=None):
-        user = request.user.follows.all()
-        serializer = UserFollowsSerializer(data=request.data)
-        if serializer.is_valid():
-            user.follows.add(request.data)
-            serializer.save(user=request.user)
-            return Response(serializer.data)
-        return Response(serializer.errors)
-        
+        username = request.data["user"]
+        user = User.objects.get(username=username)
+        request.user.followed_users.add(user)
+        return Response(request.data)

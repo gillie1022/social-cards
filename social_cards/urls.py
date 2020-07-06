@@ -22,7 +22,7 @@ from cards import views as cards_views
 
 router = routers.DefaultRouter()
 router.register('users', cards_views.UserViewSet)
-router.register('cards', cards_views.CardViewSet)
+router.register('cards', cards_views.CardViewSet, basename='card')
 
 
 urlpatterns = [
