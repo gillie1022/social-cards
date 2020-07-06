@@ -5,6 +5,7 @@ from cards.models import Card
 from cards.serializers import UserSerializer, CardSerializer, UserFollowsSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,17 +28,26 @@ class CardViewSet(viewsets.ModelViewSet):
         cards = request.user.cards.all()
         serializer = CardSerializer(cards, many=True, context={'request': request})
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    def all(self, request):
+        cards = Card.objects.all()
+        serializer = CardSerializer(cards, many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 
 
 class UserFollowsView(views.APIView):
-    def get(self, request, username, format=None):
-        user = get_object_or_404(User, username=username)
-        serializer = UserSerializer(user.follows.all(), many=True, context={'request':request})
+    def get(self, request, format=None):
+        user = request.user
+        serializer = UserFollowsSerializer(user, many=True, context={'request':request})
         return Response(serializer.data)
         
-    def post(self, request, username, format=None):
-        user = get_object_or_404(User, username=username)
-        serializer = UserFollowsSerializer(self.request.user.follows.all(), many=True, context={'request':request})
-        return Response(serializer.data)
+    def post(self, request, format=None):
+        serializer = UserFollowsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
         

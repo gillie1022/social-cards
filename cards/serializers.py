@@ -14,9 +14,10 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 class UserFollowsSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
-        fields =['follows']
+        fields =['username']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
