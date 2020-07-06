@@ -23,15 +23,23 @@ class CardViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=False, methods=['GET', 'POST'], permission_classes=[permissions.IsAuthenticated])
     def me(self, request):
         cards = request.user.cards.all()
+        page = self.paginate_queryset(cards)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = CardSerializer(cards, many=True, context={'request': request})
         return Response(serializer.data)
     
-    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    @action(detail=False, methods=['GET', 'POST'], permission_classes=[permissions.IsAuthenticated])
     def all(self, request):
         cards = Card.objects.all()
+        page = self.paginate_queryset(cards)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = CardSerializer(cards, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -40,14 +48,16 @@ class CardViewSet(viewsets.ModelViewSet):
 
 class UserFollowsView(views.APIView):
     def get(self, request, format=None):
-        user = request.user
+        user = User.objects.all()
         serializer = UserFollowsSerializer(user, many=True, context={'request':request})
         return Response(serializer.data)
         
     def post(self, request, format=None):
+        user = request.user.follows.all()
         serializer = UserFollowsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user.follows.add(request.data)
+            serializer.save(user=request.user)
             return Response(serializer.data)
         return Response(serializer.errors)
         
