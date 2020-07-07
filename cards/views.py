@@ -61,7 +61,8 @@ class UserFollowsView(views.APIView):
         return Response(request.data)
 
 class UnfollowView(views.APIView):
-    def post(self, request, followed_user_username, format=None):
+
+    def delete(self, request, followed_user_username, format=None):
         user_to_unfollow = get_object_or_404(request.user.followed_users,username=followed_user_username)
         request.user.followed_users.remove(user_to_unfollow)
         return Response(request.data)

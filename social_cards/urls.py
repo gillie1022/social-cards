@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.authtoken')),
     path('api/', include(router.urls)),
     path('api/follows/', cards_views.UserFollowsView.as_view(), name='follows'),
-    path('api/unfollow/<followed_user_username>/', cards_views.UnfollowView.as_view(), name='unfollow')
+    path('api/follows/<followed_user_username>/', cards_views.UnfollowView.as_view(), name='unfollow')
 
 ]
 
